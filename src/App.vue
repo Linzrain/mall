@@ -1,14 +1,16 @@
 <template>
+	<div>标题</div>
 </template>
 
 <script>
 
 export default {
-  name: 'App',
-  components: {
-  }
+	name: 'App',
+	components: {
+	}
 }
-</script>
+</script> 
 
-<style>
+<style>	
+  @import "assets/css/base.css"
 </style>
