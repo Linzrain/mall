@@ -1,16 +1,21 @@
 <template>
-	<div>标题</div>
+	<div id="PageBox">
+		<router-view></router-view>
+		<true-bar></true-bar>
+	</div>
 </template>
 
 <script>
+	import TrueBar from "components/content/TrueBar"
 
-export default {
-	name: 'App',
-	components: {
+	export default {
+		name: 'App',
+		components: {
+			TrueBar
+		}
 	}
-}
-</script> 
+</script>
 
-<style>	
-  @import "assets/css/base.css"
+<style scoped>
+	@import "assets/css/base.css"
 </style>
