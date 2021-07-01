@@ -1,13 +1,11 @@
 <template>
 	<div id="swiper-box">
-		<div class="swiper" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd">
+		<div class="swiper" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd" ref="swiper">
 			<slot></slot>
 		</div>
-		<div class="indicator" v-if="showIndicator && slideCount>1 ">
-			<slot name="indicator">
-				<div v-for="(item, index) in slideCount" class="indi-item" :class="{active: index === currentIndex-1}"
-					:key="index"></div>
-			</slot>
+		<div class="indicator" v-if="showIndicator&&slideCount>1">
+			<div class="indi-item" v-for="(item, index) in slideCount" :class="{active: index === currentIndex-1}"
+				:key="index"></div>
 		</div>
 	</div>
 </template>
@@ -35,6 +33,7 @@
 		},
 		data() {
 			return {
+				slideone: '',
 				slideCount: 0, // 元素个数
 				slideWidth: 0, // slide的宽度
 				swiperStyle: {}, // swiper的样式
@@ -45,25 +44,25 @@
 		mounted() {
 			//<<<<<<<<<<<  入口  初始化要移动Dom      >>>>>>>>>>>>>>>
 			setTimeout(() => {
-				//1. 初始化要移动的Dom和其子元素 
+
+				//1. 初始化要移动的Dom和其子元素
 				this.handleDom();
 
 				//2. 开启定时器
 				this.starTimer();
-
-			}, 150)
+			},150)
 		},
 		methods: {
 
 			//初始化函数
 			handleDom() {
 				//1.1 获取要移动的Dom
-				let swiperEle = document.querySelector('.swiper');
+				let swiperEle = this.$refs.swiper;
 				let slideEles = swiperEle.getElementsByClassName("slide");
+				
 
 				//1.2 获取要移动的Dom中子元素的个数并保存
 				this.slideCount = slideEles.length
-
 				//1.3 如果子元素个数大于1，则在前后分别添加一个slide以达到可循环
 				if (this.slideCount > 1) {
 					let cloneFirst = slideEles[0].cloneNode(true);
@@ -144,7 +143,6 @@
 			touchStart(e) {
 				// 1.如果正在滚动,不可拖动
 				if (this.scrolling) return;
-				console.log("start")
 				// 2.停止定时器
 				this.stopTimer();
 
@@ -159,7 +157,6 @@
 				this.distance = this.currentX - this.startX;
 				let currentPosition = -this.currentIndex * this.slideWidth;
 				let movDistance = this.distance + currentPosition;
-				console.log("move")
 				// 2.设置当前位置
 				this.setTransform(movDistance)
 			},
@@ -167,7 +164,6 @@
 			touchEnd() {
 				// 1.获取移动的距离
 				let currentMove = Math.abs(this.distance);
-				console.log("end")
 				// 2.判断最终的距离
 				if (this.distance === 0) {
 					return
@@ -199,7 +195,6 @@
 
 	.swiper {
 		display: flex;
-
 	}
 
 	.indicator {

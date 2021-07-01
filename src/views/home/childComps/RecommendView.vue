@@ -29,7 +29,7 @@
 		width: 100%;
 		
 		font-size: 12px;
-		padding: 10px 0 20px;
+		padding: 14px 0 20px 0;
 		border-bottom: 10px solid #eee;
 	}
 	.recommend-item{

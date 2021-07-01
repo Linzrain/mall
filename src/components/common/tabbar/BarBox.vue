@@ -14,7 +14,7 @@
 	#bar-box {
 		display: flex;
 		background-color: #f6f6f6;
-		position: absolute;
+		position: fixed;
 		left: 0;
 		right: 0;
 		bottom: 0;

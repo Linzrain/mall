@@ -6,7 +6,7 @@
 </template>
 
 <script>
-	import TrueBar from "components/content/TrueBar"
+	import TrueBar from "components/content/truebar/TrueBar"
 
 	export default {
 		name: 'App',

@@ -6,20 +6,20 @@
 
 <script>
 	export default {
-		name: "SwiperItem"
+		name: "SwiperItem",
+		mounted() {
+			
+		}
 	}
 </script>
 
-<style>
+<style scoped>
 	.slide {
 		width: 100%;
 		flex-shrink: 0;
 	}
-	
-	
-	.slide img{
+	.slide >>> img{
 		width: 100%;
 		vertical-align: middle;
 	}
-	
 </style>

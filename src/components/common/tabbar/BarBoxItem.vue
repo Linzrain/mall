@@ -39,7 +39,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	.bar-box-item {
 		flex: 1;
 		text-align: center;
@@ -47,7 +47,7 @@
 		font-size: 14px;
 	}
 
-	.bar-box-item img {
+	.bar-box-item >>> img {
 		width: 24px;
 		height: 24px;
 		margin-top: 3px;
