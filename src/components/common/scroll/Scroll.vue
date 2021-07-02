@@ -8,24 +8,54 @@
 
 <script>
 	import BScroll from "better-scroll"
-	
+
 	export default {
 		name: "Scroll",
+		props: {
+			probeType: {
+				type: Number,
+				default: 0
+			},
+			pullUpLoad: {
+				type: Boolean,
+				default: false
+			}
+		},
 		data() {
 			return {
 				scroll: null
 			}
 		},
 		mounted() {
-			this.scroll = new BScroll(this.$refs.wrapper,{
+			this.scroll = new BScroll(this.$refs.wrapper, {
 				scrollY: true,
-				click: true
+				click: true,
+				probeType: this.probeType,
+				pullUpLoad: this.pullUpLoad
 			})
+			// 监听滚动
+			if (this.probeType === 2 || this.probeType === 3) {
+				this.scroll.on('scroll',(position) => {
+					this.$emit('scroll',position)
+				})
+			}
+			// 监听滚动到底部
+			if(this.pullUpLoad) {
+				this.scroll.on('pullingUp',() => {
+					this.$emit("pullingUp")
+				})
+			}
 		},
-		methods:{
+		methods: {
 			refresh() {
 				this.scroll.refresh()
 				console.log("1")
+			},
+			scrollTo(x, y, time) {
+				this.scroll.scrollTo(x, y, time)
+			},
+			finishPullUp() {
+				this.scroll && this.scroll.finishPullUp()
 			}
 		}
 	}

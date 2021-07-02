@@ -3,8 +3,8 @@
 		<div class="swiper" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd" ref="swiper">
 			<slot></slot>
 		</div>
-		<div class="indicator" v-if="showIndicator&&slideCount>1">
-			<div class="indi-item" v-for="(item, index) in slideCount" :class="{active: index === currentIndex-1}"
+		<div class="indicator" v-if="showIndicator&&slideCounter>1">
+			<div class="indi-item" v-for="(item, index) in slideCounter" :class="{active: index === currentIndex-1}"
 				:key="index"></div>
 		</div>
 	</div>
@@ -29,28 +29,32 @@
 			showIndicator: {
 				type: Boolean,
 				default: true
+			},
+			slideCounter: {
+				type: Number,
+				default: 0
 			}
 		},
 		data() {
 			return {
 				slideone: '',
-				slideCount: 0, // 元素个数
 				slideWidth: 0, // slide的宽度
 				swiperStyle: {}, // swiper的样式
 				currentIndex: 1, // 当前的index
 				scrolling: false // 是否正在滚动
 			}
 		},
-		mounted() {
-			//<<<<<<<<<<<  入口  初始化要移动Dom      >>>>>>>>>>>>>>>
-			setTimeout(() => {
-
-				//1. 初始化要移动的Dom和其子元素
-				this.handleDom();
-
-				//2. 开启定时器
-				this.starTimer();
-			},150)
+		watch: {
+			//<<<<<<<<<<<  入口  初始化要移动的Dom      >>>>>>>>>>>>>>>
+			slideCounter(val) {
+				if(val>1) {
+					//1. 初始化要移动的Dom和其子元素
+					this.handleDom();
+					
+					//2. 开启定时器
+					this.starTimer();
+				}
+			}
 		},
 		methods: {
 
@@ -59,20 +63,17 @@
 				//1.1 获取要移动的Dom
 				let swiperEle = this.$refs.swiper;
 				let slideEles = swiperEle.getElementsByClassName("slide");
-				
 
-				//1.2 获取要移动的Dom中子元素的个数并保存
-				this.slideCount = slideEles.length
-				//1.3 如果子元素个数大于1，则在前后分别添加一个slide以达到可循环
-				if (this.slideCount > 1) {
+				//1.2 如果子元素个数大于1，则在前后分别添加一个slide以达到可循环
+				if (this.slideCounter > 1) {
 					let cloneFirst = slideEles[0].cloneNode(true);
-					let cloneLast = slideEles[this.slideCount - 1].cloneNode(true);
+					let cloneLast = slideEles[this.slideCounter - 1].cloneNode(true);
 					swiperEle.insertBefore(cloneLast, slideEles[0]);
 					swiperEle.appendChild(cloneFirst);
 					this.slideWidth = swiperEle.offsetWidth;
 					this.swiperStyle = swiperEle.style; // swiper的样式地址赋值给this.swiperStyle，以便监听
 
-					//1.4 让swiper元素初始化位置以便显示正确的第一张图片
+					//1.3 让swiper元素初始化位置以便显示正确的第一张图片
 					this.setTransform(-this.slideWidth)
 				}
 			},
@@ -120,10 +121,10 @@
 			// 滚动完成后移动到正确的位置的函数
 			checkPosition() {
 				//2.4.1 先校验正确位置
-				if (this.currentIndex >= this.slideCount + 1) {
+				if (this.currentIndex >= this.slideCounter + 1) {
 					this.currentIndex = 1
 				} else if (this.currentIndex <= 0) {
-					this.currentIndex = this.slideCount;
+					this.currentIndex = this.slideCounter;
 				}
 
 				window.setTimeout(() => {

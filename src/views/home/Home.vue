@@ -5,13 +5,17 @@
 				<div>首页</div>
 			</template>
 		</nav-bar>
-		<scroll class="scroll" ref="scroll">
+		<tab-control :titles="['流行','新款','精选']" @tabClick="tabClick" ref="tabControl2" class="fixed" v-show="isfixed"></tab-control>
+		<scroll class="scroll" ref="scroll" :probe-type="3" @scroll="contentScroll" :pull-up-load="true"
+			@pullingUp="loadMore">
 			<home-swiper :banners="banners"></home-swiper>
 			<recommend-view :recommends="recommends"></recommend-view>
 			<feature></feature>
-			<tab-control :titles="['流行','新款','精选']" @tabClick="tabClick"></tab-control>
+			<tab-control :titles="['流行','新款','精选']" @tabClick="tabClick" ref="tabControl1">
+			</tab-control>
 			<goods-list :goods="showGoods"></goods-list>
 		</scroll>
+		<back-top @click="backTopClick" v-show="isShowBackTop"></back-top>
 	</div>
 </template>
 
@@ -22,13 +26,17 @@
 
 	import NavBar from "components/common/navbar/NavBar"
 	import TabControl from "components/content/tabControl/TabControl"
-	import GoodsList from "components/content/goods/GoodsList.vue"
-	import Scroll from "components/common/scroll/Scroll.vue"
+	import GoodsList from "components/content/goods/GoodsList"
+	import Scroll from "components/common/scroll/Scroll"
+	import BackTop from "components/content/backTop/BackTop"
 
 	import {
 		getHomeMultidata,
 		getHomeGoods
 	} from "network/home"
+	import {
+		debounce
+	} from "common/utils.js"
 
 	export default {
 		name: "Home",
@@ -39,7 +47,8 @@
 			NavBar,
 			TabControl,
 			GoodsList,
-			Scroll
+			Scroll,
+			BackTop
 		},
 		data() {
 			return {
@@ -60,7 +69,8 @@
 					}
 				},
 				currenType: "pop",
-				isShowBackTop: false
+				isShowBackTop: false,
+				isfixed: false
 			}
 		},
 		computed: {
@@ -78,15 +88,17 @@
 			tabClick(index) {
 				switch (index) {
 					case 0:
-					this.currenType = "pop"
-					break
+						this.currenType = "pop"
+						break
 					case 1:
-					this.currenType = "new"
-					break
+						this.currenType = "new"
+						break
 					case 2:
-					this.currenType = "sell"
-					break
+						this.currenType = "sell"
+						break
 				}
+				this.$refs.tabControl1.currentIndex = index;
+				this.$refs.tabControl2.currentIndex = index;
 			},
 			getHomeMultidata() {
 				getHomeMultidata().then(res => {
@@ -101,19 +113,23 @@
 					this.goods[type].page += 1
 				})
 			},
-			debounce(func,delay) {
-				let timer = null;
-				return function (...args) {
-					if(timer) clearTimeout(timer);
-					timer = setTimeout(() => {
-						func.apply(this,args)
-					},delay)
-				}
+			backTopClick() {
+				this.$refs.scroll.scrollTo(0, 0, 400)
+			},
+			contentScroll(position) {
+				this.isShowBackTop = (-position.y) < 1000 ? false : true;
+				this.isfixed = -position.y >= this.$refs.tabControl1.$el.offsetTop ? true : false
+				
+
+			},
+			loadMore() {
+				this.getHomeGoods(this.currenType)
+				this.$refs.scroll && this.$refs.scroll.finishPullUp()
 			}
 		},
 		mounted() {
-			const refresh = this.debounce(this.$refs.scroll.refresh,100)
-			this.$mybus.on('imageLoad',() => {
+			const refresh = debounce(this.$refs.scroll.refresh, 100)
+			this.$mybus.on('imageLoad', () => {
 				refresh()
 			})
 
@@ -122,9 +138,10 @@
 </script>
 
 <style scoped>
-	.home{
+	.home {
 		position: relative;
 	}
+
 	.home-nav {
 		position: fixed;
 		left: 0;
@@ -134,12 +151,19 @@
 		color: #fff;
 		z-index: 9;
 	}
-	
-	.scroll{
+
+	.scroll {
 		position: absolute;
 		top: 44px;
 		bottom: 49px;
 		left: 0;
 		right: 0;
+	}
+
+	.fixed {
+		position: fixed;
+		top: 44px;
+		z-index: 9;
+		width: 100%;
 	}
 </style>
