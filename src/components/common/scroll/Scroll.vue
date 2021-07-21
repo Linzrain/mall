@@ -45,11 +45,12 @@
 					this.$emit("pullingUp")
 				})
 			}
+			
 		},
 		methods: {
 			refresh() {
 				this.scroll.refresh()
-				console.log("1")
+				console.log(this.scroll.scrollerHeight)
 			},
 			scrollTo(x, y, time) {
 				this.scroll.scrollTo(x, y, time)

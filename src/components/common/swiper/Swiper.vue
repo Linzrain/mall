@@ -50,7 +50,6 @@
 				if(val>1) {
 					//1. 初始化要移动的Dom和其子元素
 					this.handleDom();
-					
 					//2. 开启定时器
 					this.starTimer();
 				}
@@ -63,7 +62,7 @@
 				//1.1 获取要移动的Dom
 				let swiperEle = this.$refs.swiper;
 				let slideEles = swiperEle.getElementsByClassName("slide");
-
+				
 				//1.2 如果子元素个数大于1，则在前后分别添加一个slide以达到可循环
 				if (this.slideCounter > 1) {
 					let cloneFirst = slideEles[0].cloneNode(true);

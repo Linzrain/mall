@@ -4,6 +4,7 @@ import Home from "views/home/Home"
 import Category from "views/category/Category"
 import Cart from "views/cart/Cart"
 import Profile from "views/profile/Profile"
+import Detail from "views/detail/Detail"
 
 
 const routes = [
@@ -26,6 +27,10 @@ const routes = [
 	{
 		path: '/profile',
 		component: Profile
+	},
+	{
+		path: '/detail',
+		component: Detail
 	}
 ] 
 //创建router实例
