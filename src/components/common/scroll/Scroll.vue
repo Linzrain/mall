@@ -50,7 +50,6 @@
 		methods: {
 			refresh() {
 				this.scroll.refresh()
-				console.log(this.scroll.scrollerHeight)
 			},
 			scrollTo(x, y, time) {
 				this.scroll.scrollTo(x, y, time)
@@ -62,5 +61,8 @@
 	}
 </script>
 
-<style>
+<style scoped>
+	.wrapper{
+		overflow: hidden;
+	}
 </style>

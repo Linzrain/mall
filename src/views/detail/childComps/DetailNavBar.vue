@@ -38,6 +38,7 @@
 			},
 			itemClick(index) {
 				this.currentIndex = index
+				this.$emit("navClick",index)
 			}
 		}
 	}

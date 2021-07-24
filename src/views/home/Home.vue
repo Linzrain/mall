@@ -70,7 +70,8 @@
 				},
 				currenType: "pop",
 				isShowBackTop: false,
-				isfixed: false
+				isfixed: false,
+				startY: 0
 			}
 		},
 		computed: {
@@ -83,6 +84,19 @@
 			this.getHomeGoods("pop")
 			this.getHomeGoods("new")
 			this.getHomeGoods("sell")
+		},
+		activated() {
+				this.$refs.scroll.refresh()
+				this.$refs.scroll.scrollTo(0,this.startY,0)
+		},
+		deactivated() {
+			this.startY = this.$refs.scroll.scroll.y
+		},
+		mounted() {
+			const refresh = debounce(this.$refs.scroll.refresh, 100)
+			this.$mybus.on('imageLoad', () => {
+				refresh()
+			})
 		},
 		methods: {
 			tabClick(index) {
@@ -126,13 +140,6 @@
 				this.getHomeGoods(this.currenType)
 				this.$refs.scroll && this.$refs.scroll.finishPullUp()
 			}
-		},
-		mounted() {
-			const refresh = debounce(this.$refs.scroll.refresh, 100)
-			this.$mybus.on('imageLoad', () => {
-				refresh()
-			})
-
 		}
 	}
 </script>

@@ -1,6 +1,6 @@
 <template>
 	<div class="goods-item">
-		<img :src="goodsItem.show.img" alt="" @load="imageLoad" @click="clickItem"/>
+		<img :src="imgae" alt="" @load="imageLoad" @click="clickItem"/>
 		<div class="goods-info">
 			<p>{{goodsItem.title}}</p>
 			<span class="price">{{goodsItem.price}}</span>
@@ -18,6 +18,14 @@
 				default () {
 					return {}
 				}
+			}
+		},
+		computed:{
+			imgae(){
+				if(this.goodsItem.show) {
+					return this.goodsItem.show.img
+				}
+				return this.goodsItem.image
 			}
 		},
 		methods:{

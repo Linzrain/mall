@@ -15,10 +15,6 @@
 </template>
 
 <script>
-	import {
-		debounce
-	} from "common/utils.js"
-	
 	export default {
 		name: "DetailGoodsInfo",
 		props: {
@@ -34,18 +30,15 @@
 		},
 		methods: {
 			imgLoad() {
-					this.emitLoad();
-			},
-			emitLoad: debounce(function () {
-				this.$emit('imageLoad')
-			},200)
-		},
-		watch: {
-			detailInfo() {
-				// 获取图片的个数
-				this.imagesLength = this.detailInfo.detailImage[0].list.length
+					this.$emit('imageLoad')
 			}
 		}
+		// watch: {
+		// 	detailInfo() {
+		// 		// 获取图片的个数
+		// 		this.imagesLength = this.detailInfo.detailImage[0].list.length
+		// 	}
+		// }
 	}
 </script>
 
